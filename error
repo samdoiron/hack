@@ -1,0 +1,51 @@
+make program.o
+clang++ -c -Weverything -Werror -pedantic -o program.o program.cc
+In file included from program.cc:1:
+In file included from ./program.hh:6:
+./instruction.hh:13:24: error: return type 'hack::Instruction' is an abstract class
+    static Instruction fromAssembly(std::string);
+           ~~~~~~~~~~~ ^
+./instruction.hh:10:18: note: unimplemented pure virtual method 'asAssembly' in 'Instruction'
+    virtual void asAssembly() = 0;
+                 ^
+./instruction.hh:11:18: note: unimplemented pure virtual method 'asHackBinary' in 'Instruction'
+    virtual void asHackBinary() = 0;
+                 ^
+./instruction.hh:8:7: error: 'hack::Instruction' has virtual functions but non-virtual destructor [-Werror,-Wnon-virtual-dtor]
+class Instruction {
+      ^
+./instruction.hh:8:7: error: 'Instruction' has no out-of-line virtual method definitions; its vtable will be emitted in every translation unit [-Werror,-Wweak-vtables]
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:1483:14: note: in instantiation of function template specialization 'std::__1::allocator_traits<std::__1::allocator<hack::Instruction> >::__destroy<hack::Instruction>' requested here
+            {__destroy(__has_destroy<allocator_type, _Tp*>(), __a, __p);}
+             ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:448:25: note: in instantiation of function template specialization 'std::__1::allocator_traits<std::__1::allocator<hack::Instruction> >::destroy<hack::Instruction>' requested here
+        __alloc_traits::destroy(__alloc(), _VSTD::__to_raw_pointer(--__end_));
+                        ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:372:29: note: in instantiation of member function 'std::__1::__vector_base<hack::Instruction, std::__1::allocator<hack::Instruction> >::__destruct_at_end' requested here
+    void clear() _NOEXCEPT {__destruct_at_end(__begin_);}
+                            ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:475:9: note: in instantiation of member function 'std::__1::__vector_base<hack::Instruction, std::__1::allocator<hack::Instruction> >::clear' requested here
+        clear();
+        ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:481:29: note: in instantiation of member function 'std::__1::__vector_base<hack::Instruction, std::__1::allocator<hack::Instruction> >::~__vector_base' requested here
+class _LIBCPP_TYPE_VIS_ONLY vector
+                            ^
+In file included from program.cc:1:
+In file included from ./program.hh:4:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:439:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm:627:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:1462:36: error: allocating an object of abstract class type 'hack::Instruction'
+                ::new ((void*)__p) _Tp(__a0);
+                                   ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:963:25: note: in instantiation of function template specialization 'std::__1::allocator_traits<std::__1::allocator<hack::Instruction> >::construct<hack::Instruction, hack::Instruction>' requested here
+        __alloc_traits::construct(__a, _VSTD::__to_raw_pointer(this->__end_), *__first);
+                        ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:1160:9: note: in instantiation of function template specialization 'std::__1::vector<hack::Instruction, std::__1::allocator<hack::Instruction> >::__construct_at_end<hack::Instruction *>' requested here
+        __construct_at_end(__x.__begin_, __x.__end_);
+        ^
+program.cc:45:10: note: in instantiation of member function 'std::__1::vector<hack::Instruction, std::__1::allocator<hack::Instruction> >::vector' requested here
+  return instructions;
+         ^
+4 errors generated.
+make[1]: *** [program.o] Error 1
+make: *** [test] Error 2
