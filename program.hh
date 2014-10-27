@@ -15,10 +15,12 @@ class Program {
     std::vector<hack::Instruction*> asInstructions();
 
   private:
-    std::string assemblySource;
+    std::vector<hack::Instruction*> instructions;
     std::string normalizeAssembly(std::string);
     std::string stripWhitespace(std::string);
     std::string stripComments(std::string);
+    std::string stripCharacter(std::string, std::string);
+    bool hasInstructions();
 };
 
 class InvalidSyntaxException {

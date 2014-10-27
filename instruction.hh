@@ -3,13 +3,15 @@
 #ifndef HACK_INSTRUCTION_H_
 #define HACK_INSTRUCTION_H_
 
+#include <string>
+
 namespace hack {
 
 class Instruction {
   public:
     virtual ~Instruction() {}
-    virtual void asAssembly() = 0;
-    virtual void asHackBinary() = 0;
+    virtual std::string asAssembly() = 0;
+    virtual std::string asHackBinary() = 0;
   
     static Instruction* fromAssembly(std::string);
 };
