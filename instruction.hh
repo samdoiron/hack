@@ -4,6 +4,7 @@
 #define HACK_INSTRUCTION_H_
 
 #include <string>
+#include "program.hh"
 
 namespace hack {
 
@@ -13,7 +14,7 @@ class Instruction {
     virtual std::string asAssembly() = 0;
     virtual std::string asHackBinary() = 0;
   
-    static Instruction* fromAssembly(std::string);
+    static Instruction* fromAssembly(Program, std::string);
 };
 
 }

@@ -94,4 +94,65 @@ SCENARIO("Strings can be trimmed", "[stringutil]") {
   }
 }
 
+/* SCENARIO("strings can be split", "[stringutil]") { */
+/*   std::string splitChar = "|"; */
+
+/*   GIVEN("an empty string") { */
+/*     std::string emptyString = ""; */
+/*     WHEN("the string is split") { */
+/*       std::vector<std::string> result = hack::split(emptyString, splitChar); */
+/*       THEN("the result should contain a single empty string") { */
+/*         CHECK(result[0] == ""); */
+/*         REQUIRE(result.size() == 1); */
+/*       } */
+/*     } */
+/*   } */
+
+/*   GIVEN("an empty split character and non-empty string") { */
+/*     WHEN("the string is split") { */
+/*       THEN("the result should contain the original string") { */
+/*       } */
+/*     } */
+/*   } */
+
+/*   GIVEN("a string that does not contain the split character") { */
+/*     std::string testString = "12345"; */
+/*   } */
+
+/*   GIVEN("a string that contains the split character once") { */
+/*     std::string testString = "123|567"; */
+/*   } */
+
+/*   GIVEN("a string that contains multiple split characters") { */
+/*     std::string testString = "123|567|9"; */
+/*   } */
+
+/*   GIVEN("a string that ends with the split character") { */
+/*     std::string testString = "12|3|"; */
+
+/*     WHEN("the string is split") { */
+/*       THEN("the result should not end in an empty string") { */
+
+/*       } */
+/*     } */
+/*   } */
+
+/*   GIVEN("a string that has two split characters in a row") { */
+/*     WHEN("the string is split") { */
+/*       THEN("the split should not contain an empty string") { */
+
+/*       } */
+/*     } */
+/*   } */
+
+/*   GIVEN("a string that begins with the split character") { */
+/*     std::string testString = "|234"; */
+
+/*     WHEN("the string is split") { */
+/*       THEN("the result should not end in an empty string") { */
+/*       } */
+/*     } */
+/*   } */
+
+/* } */
 

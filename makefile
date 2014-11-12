@@ -21,6 +21,10 @@ test_header.o: test/test_header.cc test/catch.h
 instruction.o: instruction.hh instruction.cc
 	clang++ $(LDFLAGS) -o instruction.o instruction.cc
 
+debug:
+	make $(file).o
+	clang++ $(TESTFLAGS) test/test_header.o $(file).o test/test_$(file).cc -o test/$(file)
+
 test:
 	make $(file).o
 	clang++ $(TESTFLAGS) test/test_header.o $(file).o test/test_$(file).cc -o test/$(file)

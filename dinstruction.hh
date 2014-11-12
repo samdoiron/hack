@@ -6,10 +6,11 @@
 
 namespace hack {
 
-class DInstruction : Instruction {
+class DInstruction : public Instruction {
   public:
-    std::string asAssembly();
+    DInstruction(std::string);
     std::string asHackBinary();
+    std::string asAssembly();
 };
 
 }
