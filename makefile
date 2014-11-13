@@ -1,5 +1,5 @@
 CPPFLAGS = -c -std=c++11 -Weverything -Werror -pedantic -Wno-c++98-compat -g
-TESTFLAGS = -I .
+TESTFLAGS = -std=c++11 -I .
 LDFLAGS = -g
 
 .PHONY: clean test debug

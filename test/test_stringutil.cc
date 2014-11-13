@@ -94,65 +94,76 @@ SCENARIO("Strings can be trimmed", "[stringutil]") {
   }
 }
 
-/* SCENARIO("strings can be split", "[stringutil]") { */
-/*   std::string splitChar = "|"; */
+SCENARIO("strings can be split", "[stringutil]") {
+  WHEN("an empty string is split") {
+    std::vector<std::string> result = hack::split("", '|');
+    THEN("the result should contain a single empty string") {
+      REQUIRE(result.size() == 1);
+      CHECK(result[0] == "");
+    }
+  }
 
-/*   GIVEN("an empty string") { */
-/*     std::string emptyString = ""; */
-/*     WHEN("the string is split") { */
-/*       std::vector<std::string> result = hack::split(emptyString, splitChar); */
-/*       THEN("the result should contain a single empty string") { */
-/*         CHECK(result[0] == ""); */
-/*         REQUIRE(result.size() == 1); */
-/*       } */
-/*     } */
-/*   } */
+  WHEN("a string does not contain the split character") {
+    std::vector<std::string> result = hack::split("12345", '|');
 
-/*   GIVEN("an empty split character and non-empty string") { */
-/*     WHEN("the string is split") { */
-/*       THEN("the result should contain the original string") { */
-/*       } */
-/*     } */
-/*   } */
+    THEN("the result contains only the original string") {
+      REQUIRE(result.size() == 1);
+      CHECK(result[0] == "12345");
+    }
+  }
 
-/*   GIVEN("a string that does not contain the split character") { */
-/*     std::string testString = "12345"; */
-/*   } */
+  WHEN("a string contains the split character once") {
+    std::vector<std::string> result = hack::split("123|45", '|');
+    THEN("the elements should be those on either side of the split character") {
+      REQUIRE(result.size() == 2);
+      CHECK(result[0] == "123");
+      CHECK(result[1] == "45");
+    }
+  }
 
-/*   GIVEN("a string that contains the split character once") { */
-/*     std::string testString = "123|567"; */
-/*   } */
+  WHEN("the string contains the split character multiple times") {
+    std::vector<std::string> result = hack::split("123|456|7", '|');
+    THEN("the result should include only all split sections") {
+      CAPTURE(result[0]);
+      CAPTURE(result[1]);
+      REQUIRE(result.size() == 3);
+      CHECK(result[0] == "123");
+      CHECK(result[1] == "456");
+      CHECK(result[2] == "7");
+    }
+  }
 
-/*   GIVEN("a string that contains multiple split characters") { */
-/*     std::string testString = "123|567|9"; */
-/*   } */
+  WHEN("a string ends with the split character") {
+    std::vector<std::string> result = hack::split("1|23|", '|');
+    THEN("the result should not end in an empty string") {
+      REQUIRE(result.size() == 2);
+      CHECK(result[result.size() - 1] != "");
+    }
+  }
 
-/*   GIVEN("a string that ends with the split character") { */
-/*     std::string testString = "12|3|"; */
+  WHEN("a string has two split characters in a row") {
+    std::vector<std::string> result = hack::split("1||2", '|');
+    THEN("the split should not contain an empty string") {
+      REQUIRE(result.size() == 2);
+      CHECK(result[0] == "1");
+      CHECK(result[1] == "2");
+    }
+  }
 
-/*     WHEN("the string is split") { */
-/*       THEN("the result should not end in an empty string") { */
+  WHEN("a string begins with the split character") {
+    std::vector<std::string> result = hack::split("|234", '|');
+    THEN("the result should not end with an empty string") {
+      REQUIRE(result.size() == 1);
+      CHECK(result[0] == "234");
+    }
+  }
 
-/*       } */
-/*     } */
-/*   } */
+  WHEN("a string contains only the split character") {
+    std::vector<std::string> result = hack::split("|||||||", '|');
+    THEN("the result should be empty") {
+      REQUIRE(result.size() == 0);
+    }
+  }
 
-/*   GIVEN("a string that has two split characters in a row") { */
-/*     WHEN("the string is split") { */
-/*       THEN("the split should not contain an empty string") { */
-
-/*       } */
-/*     } */
-/*   } */
-
-/*   GIVEN("a string that begins with the split character") { */
-/*     std::string testString = "|234"; */
-
-/*     WHEN("the string is split") { */
-/*       THEN("the result should not end in an empty string") { */
-/*       } */
-/*     } */
-/*   } */
-
-/* } */
+}
 

@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <sstream>
+#include <iterator>
+
 
 namespace hack {
 
@@ -79,6 +82,37 @@ std::string rightTrimCharacters(std::string toTrim, std::vector<char> characters
   toTrim.erase(sliceBegin, toTrim.size());
 
   return toTrim;
+}
+
+std::vector<std::string> split(std::string toSplit, char delimiter) {
+  std::vector<std::string> splits;
+
+  // Special case for splitting an empty string
+  if (toSplit.empty()) {
+    splits.push_back("");
+    return splits;
+  }
+  
+  std::stringstream inputStream(toSplit);
+  std::string split;
+
+  while (std::getline(inputStream, split, delimiter)) {
+    splits.push_back(split);
+  }
+
+  // Discard empty splits (caused by multiple delimiters in a row)
+  size_t i = 0;
+  while (i < splits.size()) {
+    if (splits[i].empty()) {
+      // Cast to make sign change explicit
+      auto offset = std::vector<std::string>::difference_type (i) ;
+      splits.erase(splits.begin() + offset);
+    } else {
+      ++i;
+    }
+  }
+
+  return splits;
 }
 
 }

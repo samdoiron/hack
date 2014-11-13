@@ -18,7 +18,7 @@ std::string leftTrimCharacters(std::string, std::vector<char>);
 
 std::string rightTrimCharacters(std::string, std::vector<char>);
 
-std::vector<std::string> split(std::string, std::string);
+std::vector<std::string> split(std::string, char);
 
 }
 
