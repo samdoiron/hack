@@ -3,13 +3,11 @@
 
 namespace hack {
 
-class InvalidSyntaxException {
+class InvalidSyntaxException : public std::runtime_error {
   public:
-    InvalidSyntaxException(std::string message="Invalid Syntax");
-    std::string what() throw();
-
+    InvalidSyntaxException(std::string);
   private:
-    std::string message;
+    virtual void anchor(int);
 };
 
 }

@@ -6,6 +6,9 @@
 #include <vector>
 #include <cctype>
 
+#include "label.hh"
+#include "instruction.hh"
+
 // A hack program is a collection of instructions. These instructions can be 
 // read from a file, or input as a string. All operations on a program as a whole
 // perform the same operation on all of its instructions, and return a collection
@@ -15,35 +18,21 @@ namespace hack {
 // Program's constructor takes a string of HACK assembly.
 Program::Program(std::string source) {
   std::string normalizedSource = this->normalizeAssembly(source);
-
-  // Split the source into lines so we can create separate instructions.
-  // If an invalid instruction is found, Instruction::fromAssembly will 
-  // throw an InvalidSyntaxException.
-  int newlineIndex;
-  do {
-    newlineIndex = normalizedSource.find("\n");
-    std::string line = normalizedSource.substr(0, newlineIndex);
-    this->instructions.push_back(Instruction::fromAssembly(line));
-    normalizedSource.erase(0, newlineIndex + line.length());
-  } while (newlineIndex != std::string::npos);
-
+  std::string withoutLabels = this->extractLabels(normalizedSource);
+  this->loadInstructions(withoutLabels);
 }
 
 // Program::asHackBinary() translates all of the program's instructions 
 // into binary strings, and returns a newline-delimited string containing
 // the translations.
 std::string Program::asHackBinary() {
-  if (this->hasInstructions()) {
-    std::stringstream compiledBinary; 
+  std::stringstream compiledBinary; 
 
-    for (Instruction *instruction : this->instructions) {
-      compiledBinary << instruction->asHackBinary() << std::endl;
-    }
-
-    return compiledBinary.str();
-  } else {
-    return "";
+  for (Instruction *instruction : this->instructions) {
+    compiledBinary << instruction->asHackBinary() << std::endl;
   }
+
+  return compiledBinary.str();
 }
 
 // Program::asNormalizedAssembly() translates all instructions into 
@@ -52,7 +41,6 @@ std::string Program::asHackBinary() {
 //
 // NOTE: This is not necessarily (or even likely) the same as the input.
 std::string Program::asNormalizedAssembly() {
-  if (this->hasInstructions()) {
     std::stringstream compiledBinary; 
 
     for (Instruction *instruction : this->instructions) {
@@ -60,9 +48,6 @@ std::string Program::asNormalizedAssembly() {
     }
 
     return compiledBinary.str();
-  } else {
-    return "";
-  }
 }
 
 std::vector<Instruction*> Program::asInstructions() {
@@ -74,43 +59,90 @@ std::vector<Instruction*> Program::asInstructions() {
 // Program::normalizeAssembly() converts input assembly into a consistent form,
 // by stripping away excess whitespace and comments.
 std::string Program::normalizeAssembly(std::string assembly) {
-  std::string withoutWhitespace, withoutComments;
+  std::string withoutWhitespace, normalized, line;
+  std::stringstream inputStream(assembly), outputStream;
 
-  withoutWhitespace = this->stripWhitespace(assembly);
-  withoutComments   = this->stripComments(withoutWhitespace);
+  while (getline(inputStream, line)) {
+    if (!line.empty()) {
+      outputStream << this->normalizeLine(line) << std::endl;
+    }
+  }
 
-  return withoutComments;
+  return outputStream.str();
 }
 
-// Program::stripWhitespace() removes all leading and trailing whitespace
-// from the program. 
-//
-// NOTE: this does not remove optional whitespace from instructions themselves.
-// std::string.
-std::string Program::stripWhitespace(std::string assembly) {
-  std::string stripped;
+std::string Program::normalizeLine(std::string line) {
+  std::string withoutWhitespace, normalized;
 
-  stripped = this->stripCharacter(assembly, " ");
-  stripped = this->stripCharacter(assembly, "\t");
-  stripped = this->stripCharacter(assembly, "\n");
+  withoutWhitespace = this->stripWhitespace(line);
+  normalized        = this->stripComments(line);
+
+  return normalized;
+}
+
+// Program::stripWhitespace() removes all whitespace from the program. 
+std::string Program::stripWhitespace(std::string assembly) {
+  std::string stripped = assembly;
+
+  size_t i = 0;
+  while (i < assembly.length()) {
+    char currentChar = stripped[i];
+    if (isspace(currentChar)) {
+        stripped.erase(i);
+    } else {
+      ++i;
+    }
+  }
 
   return stripped;
-}
-
-std::string Program::stripCharacter(std::string full, std::string character) {
-  full.erase(0, full.find_first_not_of(character));
-  full.erase(0, full.find_last_not_of(character) + 1);
-  return full;
 }
 
 // Program::stripComments() removes all "//" style comments from the given
 // std::string.
 std::string Program::stripComments(std::string assembly) {
-  return assembly;
+  std::string stripped = assembly;
+
+  for (size_t i = 0; (i + 1) < assembly.length(); ++i) {
+    if (assembly[i] == '/' && assembly[i+1] == '/') {
+      stripped.erase(i, stripped.size());
+      break;
+    }
+  }
+
+  return stripped;
 }
 
-bool Program::hasInstructions() {
-  return this->instructions.size() == 0;
+// Remove and store all label values from the given assembly;
+std::string Program::extractLabels(std::string assembly) {
+  std::stringstream inputStream(assembly), outputStream;
+  std::string line;
+  int lineNumber = 1;
+
+  while (getline(inputStream, line)) {
+    if (Label::isValid(line)) {
+      // Remove the trailing ":"
+      line.erase(line.length() - 1);
+      Label label(line, lineNumber);
+      this->loadLabel(label);
+    } else {
+      outputStream << line;
+    }
+    lineNumber += 1;
+  }
+
+  return outputStream.str();
+}
+
+void Program::loadLabel(Label label) {
+    this->labels.push_back(label);
+}
+
+void Program::loadInstructions(std::string assembly) {
+    std::stringstream inputStream(assembly);
+    std::string line;
+    while (getline(inputStream, line)) {
+        this->instructions.push_back(Instruction::fromAssembly(this, line));
+    }
 }
 
 }

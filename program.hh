@@ -2,10 +2,15 @@
 #define HACK_PROGRAM_H_
 
 #include <string>
+#include <stdexcept>
 #include <vector>
 #include "instruction.hh"
+#include "label.hh"
+
 
 namespace hack {
+
+class Instruction;
 
 class Program {
   public:
@@ -15,21 +20,17 @@ class Program {
     std::vector<hack::Instruction*> asInstructions();
 
   private:
-    std::vector<hack::Instruction*> instructions;
+    std::vector<Instruction*> instructions;
+    std::vector<Label> labels;
     std::string normalizeAssembly(std::string);
+    std::string normalizeLine(std::string);
     std::string stripWhitespace(std::string);
     std::string stripComments(std::string);
-    std::string stripCharacter(std::string, std::string);
+    std::string extractLabels(std::string);
+    void loadInstructions(std::string);
+    bool lineIsLabel(std::string);
+    void loadLabel(Label);
     bool hasInstructions();
-};
-
-class InvalidSyntaxException {
-  public:
-    InvalidSyntaxException(std::string message="Invalid Syntax");
-    std::string what() throw();
-
-  private:
-    std::string message;
 };
 
 

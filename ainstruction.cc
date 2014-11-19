@@ -5,7 +5,7 @@
 
 namespace hack {
 
-AInstruction::AInstruction(Program program, std::string assembly) {
+AInstruction::AInstruction(Program *program, std::string assembly) {
 }
 
 std::string AInstruction::asAssembly() {

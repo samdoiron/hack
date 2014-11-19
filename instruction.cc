@@ -1,5 +1,7 @@
 #include "instruction.hh"
+
 #include <iostream>
+
 #include "invalidsyntaxexception.hh"
 #include "dinstruction.hh"
 #include "ainstruction.hh"
@@ -22,7 +24,7 @@ namespace hack {
 //
 // A reference to the program is also needed, as the content of an AInstruction
 // depends on the program state.
-Instruction* Instruction::fromAssembly(Program program, std::string assemblySnippet) {
+Instruction* Instruction::fromAssembly(Program *program, std::string assemblySnippet) {
   char firstCharacter = assemblySnippet.at(0);
   bool isAInstruction = firstCharacter == '@';
   bool isDInstruction = firstCharacter == 'A' 
@@ -37,7 +39,7 @@ Instruction* Instruction::fromAssembly(Program program, std::string assemblySnip
     // DInstruction is stateless, so we don't need to pass the program
     return new DInstruction(assemblySnippet);
   } else {
-    throw new InvalidSyntaxException();
+    throw new InvalidSyntaxException("Instruction is neither A nor D instruction.");
   }
 }
 

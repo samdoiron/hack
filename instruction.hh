@@ -6,7 +6,10 @@
 #include <string>
 #include "program.hh"
 
+
 namespace hack {
+
+class Program;
 
 class Instruction {
   public:
@@ -14,7 +17,7 @@ class Instruction {
     virtual std::string asAssembly() = 0;
     virtual std::string asHackBinary() = 0;
   
-    static Instruction* fromAssembly(Program, std::string);
+    static Instruction* fromAssembly(Program*, std::string);
 };
 
 }
