@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/hack.dir/ainstruction.cc.o CMakeFiles/hack.dir/dinstruction.cc.o CMakeFiles/hack.dir/hack.cc.o CMakeFiles/hack.dir/instruction.cc.o CMakeFiles/hack.dir/invalidsyntaxexception.cc.o CMakeFiles/hack.dir/label.cc.o CMakeFiles/hack.dir/program.cc.o  -o hack  

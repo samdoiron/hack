@@ -5,8 +5,8 @@
 #include <stdexcept>
 #include <vector>
 #include "instruction.hh"
-#include "label.hh"
 
+#include "label.hh"
 
 namespace hack {
 

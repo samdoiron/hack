@@ -39,7 +39,7 @@ Instruction* Instruction::fromAssembly(Program *program, std::string assemblySni
     // DInstruction is stateless, so we don't need to pass the program
     return new DInstruction(assemblySnippet);
   } else {
-    throw new InvalidSyntaxException("Instruction is neither A nor D instruction.");
+    throw InvalidSyntaxException("Instruction is neither A nor D instruction.");
   }
 }
 

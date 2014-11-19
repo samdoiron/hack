@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/samdoiron/Code/C++/HACK/hack.cc
+iostream
+-
+string
+-
+stdexcept
+-
+program.hh
+/Users/samdoiron/Code/C++/HACK/program.hh
+invalidsyntaxexception.hh
+/Users/samdoiron/Code/C++/HACK/invalidsyntaxexception.hh
+
+/Users/samdoiron/Code/C++/HACK/instruction.hh
+string
+-
+program.hh
+/Users/samdoiron/Code/C++/HACK/program.hh
+
+/Users/samdoiron/Code/C++/HACK/invalidsyntaxexception.hh
+string
+-
+
+/Users/samdoiron/Code/C++/HACK/label.hh
+string
+-
+
+/Users/samdoiron/Code/C++/HACK/program.hh
+string
+-
+stdexcept
+-
+vector
+-
+instruction.hh
+/Users/samdoiron/Code/C++/HACK/instruction.hh
+label.hh
+/Users/samdoiron/Code/C++/HACK/label.hh
+

@@ -5,6 +5,9 @@
 
 namespace hack {
 
+DInstruction::DInstruction(std::string) {
+}
+
 std::string DInstruction::asAssembly() {
   return "unimplemented";
 }
