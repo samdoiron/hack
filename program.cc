@@ -8,6 +8,7 @@
 
 #include "label.hh"
 #include "instruction.hh"
+#include "invalidsyntaxexception.hh"
 
 // A hack program is a collection of instructions. These instructions can be 
 // read from a file, or input as a string. All operations on a program as a whole
@@ -28,6 +29,7 @@ Program::Program(std::string source) {
 std::string Program::asHackBinary() {
   std::stringstream compiledBinary; 
 
+  std::cout << "Read " << this->instructions.size() << " instructions" << std::endl;
   for (Instruction *instruction : this->instructions) {
     compiledBinary << instruction->asHackBinary() << std::endl;
   }
@@ -87,7 +89,8 @@ std::string Program::stripWhitespace(std::string assembly) {
   size_t i = 0;
   while (i < assembly.length()) {
     char currentChar = stripped[i];
-    if (isspace(currentChar)) {
+    if (isspace(currentChar) && currentChar != '\n') {
+        std::cout << "deleting " << currentChar << std::endl;
         stripped.erase(i);
     } else {
       ++i;
@@ -141,7 +144,14 @@ void Program::loadInstructions(std::string assembly) {
     std::stringstream inputStream(assembly);
     std::string line;
     while (getline(inputStream, line)) {
-        this->instructions.push_back(Instruction::fromAssembly(this, line));
+        std::cout << "Instruction line is \"" << line << "\"" << std::endl;
+        try {
+            this->instructions.push_back(Instruction::fromAssembly(this, line));
+        } catch (InvalidSyntaxException e) {
+            std::stringstream errorMessage;
+            errorMessage << "Error loading instruction \"" << line << "\": " << e.what();
+            throw InvalidSyntaxException(errorMessage.str());
+        }
     }
 }
 

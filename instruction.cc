@@ -43,6 +43,9 @@ Instruction* Instruction::fromAssembly(Program *program, std::string assemblySni
   }
 }
 
+void Instruction::anchor() {
+}
+
 }
 
 

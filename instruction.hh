@@ -12,12 +12,15 @@ namespace hack {
 class Program;
 
 class Instruction {
-  public:
-    virtual ~Instruction() {}
-    virtual std::string asAssembly() = 0;
-    virtual std::string asHackBinary() = 0;
-  
-    static Instruction* fromAssembly(Program*, std::string);
+    public:
+        virtual ~Instruction() {}
+        virtual std::string asAssembly() = 0;
+        virtual std::string asHackBinary() = 0;
+
+        static Instruction* fromAssembly(Program*, std::string);
+
+    private:
+        virtual void anchor();
 };
 
 }

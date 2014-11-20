@@ -5,11 +5,13 @@
 
 namespace hack {
 
-AInstruction::AInstruction(Program *program, std::string assembly) {
+AInstruction::AInstruction(Program *parentProgram, std::string source) {
+    this->program = parentProgram;
+    this->assembly = source;
 }
 
 std::string AInstruction::asAssembly() {
-  return "unimplemented";
+    return assembly;
 }
 
 std::string AInstruction::asHackBinary() {

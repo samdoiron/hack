@@ -6,18 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/samdoiron/Code/C++/HACK/hack.cc
-iostream
--
-string
--
-stdexcept
--
-program.hh
-/Users/samdoiron/Code/C++/HACK/program.hh
-invalidsyntaxexception.hh
-/Users/samdoiron/Code/C++/HACK/invalidsyntaxexception.hh
-
 /Users/samdoiron/Code/C++/HACK/instruction.hh
 string
 -
@@ -31,6 +19,26 @@ string
 /Users/samdoiron/Code/C++/HACK/label.hh
 string
 -
+
+/Users/samdoiron/Code/C++/HACK/program.cc
+program.hh
+/Users/samdoiron/Code/C++/HACK/program.hh
+iostream
+-
+string
+-
+sstream
+-
+vector
+-
+cctype
+-
+label.hh
+/Users/samdoiron/Code/C++/HACK/label.hh
+instruction.hh
+/Users/samdoiron/Code/C++/HACK/instruction.hh
+invalidsyntaxexception.hh
+/Users/samdoiron/Code/C++/HACK/invalidsyntaxexception.hh
 
 /Users/samdoiron/Code/C++/HACK/program.hh
 string
