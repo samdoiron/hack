@@ -22,16 +22,14 @@ class Program {
   private:
     std::vector<Instruction*> instructions;
     std::vector<Label> labels;
-    std::string normalizeAssembly(std::string);
     std::string normalizeLine(std::string);
-    std::string stripWhitespace(std::string);
     std::string stripComments(std::string);
     std::string extractLabels(std::string);
     void addInstruction(Instruction*);
     void addLabel(Label);
+    void reportParseError(int, std::string, std::runtime_error);
     bool lineIsLabel(std::string);
     bool hasInstructions();
-    void reportError(std::runtime_error);
 };
 
 

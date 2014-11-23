@@ -3,25 +3,27 @@
 #include <string>
 #include <stdexcept>
 #include <sstream>
-
-#include <boost/algorithm/string.hpp>
+#include <fstream>
 
 #include "program.hh"
 #include "invalidsyntaxexception.hh"
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    std::ostringstream sourceStream;
 
-    // Read HACK source from stdin (until EOF)
-    std::stringstream sourceStream;
-    sourceStream << std::cin.rdbuf();
-    std::string source = sourceStream.str();
-
-    try {
-        hack::Program program(source);
-        std::cout << program.asHackBinary() << std::endl;
-    } catch (hack::InvalidSyntaxException e) {
-        std::cout << "Invalid Syntax! -> " << e.what() << std::endl;
+    // Input from file argument
+    if (argc > 1) {
+        std::ifstream fileInput(argv[1]);
+        sourceStream << fileInput.rdbuf();
+    } else {
+        // Input from STDIN
+        sourceStream << std::cin.rdbuf();
     }
+
+    hack::Program program(sourceStream.str());
+    std::cout << "Output: " << std::endl;
+    std::cout << program.asHackBinary() << std::endl;
+    std::cout << "/Output" << std::endl;
     return 0;
 }
 

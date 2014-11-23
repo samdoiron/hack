@@ -8,7 +8,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
-#include <boost/log/trivial.hpp>
 
 #include "label.hh"
 #include "instruction.hh"
@@ -27,11 +26,8 @@ Program::Program(std::string source) {
     while (getline(inputStream, line)) {
         std::string normalizedLine = this->normalizeLine(line);
 
-        BOOST_LOG_TRIVIAL(trace) 
-            << "Normalized line " << line << " to " << normalizedLine;
-
         // Skip empty lines
-        if (!normalizedLine.empty()) {
+        if (normalizedLine.empty()) {
             continue;
         }
 
@@ -40,19 +36,26 @@ Program::Program(std::string source) {
             this->addLabel(Label(normalizedLine, lineNumber));
         }
 
-        normalizedStream << line;
+        normalizedStream << normalizedLine << "\n";
+        lineNumber += 1;
     }
 
     // Second pass, read in all instructions.
     // This must be done after all labels are loaded, because AInstructions 
     // need to know label addresses.
-    while (getline(inputStream, line)) {
-        try {
-            Instruction *lineInstruction = Instruction::fromAssembly(this, line);
-            this->addInstruction(lineInstruction);
-        } catch (InvalidSyntaxException e) {
-            this->reportError(e);
+    lineNumber = 1;
+    while (getline(normalizedStream, line)) {
+        // If the line is a label, ignore it.
+        if (!Label::isValid(line)) {
+            try {
+                Instruction *lineInstruction = Instruction::fromAssembly(this, line);
+                this->addInstruction(lineInstruction);
+            } catch (InvalidSyntaxException e) {
+                this->reportParseError(lineNumber, line, e);
+                throw;
+            }
         }
+        lineNumber += 1;
     }
 }
 
@@ -88,14 +91,18 @@ std::string Program::normalizeLine(std::string line) {
     return normalized;
 }
 
-void Program::reportError(std::runtime_error error) {
-    std::cout << error.what() << std::endl;
+void Program::reportParseError(
+    int lineNum, std::string assembly, std::runtime_error error
+) {
+    std::cerr << "Error parsing \"" << assembly 
+        << "\" (line " << lineNum << ") "
+        << error.what() << std::endl;
 }
 
 // Program::stripComments() removes all "//" style comments from the given
 // std::string.
 std::string Program::stripComments(std::string assembly) {
-    boost::regex commentRegex(std::string("//.*"));
+    boost::regex commentRegex("//.*");
     return boost::regex_replace(assembly, commentRegex, "");
 }
 
