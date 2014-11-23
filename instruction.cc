@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "invalidsyntaxexception.hh"
-#include "dinstruction.hh"
+#include "cinstruction.hh"
 #include "ainstruction.hh"
 #include "program.hh"
 
@@ -14,7 +14,7 @@ namespace hack {
 // that can be translated into an opcode.
 //
 // hack::Instruction is an abstract class, made concrete by hack::AInstruction 
-// and hack::DInstruction. 
+// and hack::CInstruction. 
 //
 // Instructions objects of any type should be created using 
 // Instruction::fromAssembly()
@@ -27,7 +27,7 @@ namespace hack {
 Instruction* Instruction::fromAssembly(Program *program, std::string assemblySnippet) {
     char firstCharacter = assemblySnippet.at(0);
     bool isAInstruction = firstCharacter == '@';
-    bool isDInstruction = firstCharacter == 'A' 
+    bool isCInstruction = firstCharacter == 'A' 
                        || firstCharacter == 'D' 
                        || firstCharacter == 'M';
 
@@ -35,9 +35,9 @@ Instruction* Instruction::fromAssembly(Program *program, std::string assemblySni
         // AInstruction must know the locations of variables, so it needs a 
         // reference to the program.
         return new AInstruction(program, assemblySnippet);
-    } else if (isDInstruction) {
-        // DInstruction is stateless, so we don't need to pass the program
-        return new DInstruction(assemblySnippet);
+    } else if (isCInstruction) {
+        // CInstruction is stateless, so we don't need to pass the program
+        return new CInstruction(assemblySnippet);
     } else {
         throw InvalidSyntaxException("Instruction is neither A nor D instruction.");
     }

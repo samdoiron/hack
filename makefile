@@ -139,29 +139,29 @@ ainstruction.cc.s:
 	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/ainstruction.cc.s
 .PHONY : ainstruction.cc.s
 
-dinstruction.o: dinstruction.cc.o
-.PHONY : dinstruction.o
+cinstruction.o: cinstruction.cc.o
+.PHONY : cinstruction.o
 
 # target to build an object file
-dinstruction.cc.o:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/dinstruction.cc.o
-.PHONY : dinstruction.cc.o
+cinstruction.cc.o:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/cinstruction.cc.o
+.PHONY : cinstruction.cc.o
 
-dinstruction.i: dinstruction.cc.i
-.PHONY : dinstruction.i
+cinstruction.i: cinstruction.cc.i
+.PHONY : cinstruction.i
 
 # target to preprocess a source file
-dinstruction.cc.i:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/dinstruction.cc.i
-.PHONY : dinstruction.cc.i
+cinstruction.cc.i:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/cinstruction.cc.i
+.PHONY : cinstruction.cc.i
 
-dinstruction.s: dinstruction.cc.s
-.PHONY : dinstruction.s
+cinstruction.s: cinstruction.cc.s
+.PHONY : cinstruction.s
 
 # target to generate assembly for a file
-dinstruction.cc.s:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/dinstruction.cc.s
-.PHONY : dinstruction.cc.s
+cinstruction.cc.s:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/cinstruction.cc.s
+.PHONY : cinstruction.cc.s
 
 hack.o: hack.cc.o
 .PHONY : hack.o
@@ -295,9 +295,9 @@ help:
 	@echo "... ainstruction.o"
 	@echo "... ainstruction.i"
 	@echo "... ainstruction.s"
-	@echo "... dinstruction.o"
-	@echo "... dinstruction.i"
-	@echo "... dinstruction.s"
+	@echo "... cinstruction.o"
+	@echo "... cinstruction.i"
+	@echo "... cinstruction.s"
 	@echo "... hack.o"
 	@echo "... hack.i"
 	@echo "... hack.s"

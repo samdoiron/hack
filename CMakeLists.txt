@@ -9,7 +9,7 @@ set (HACK_VERSION_MINOR 1)
 
 add_executable(hack 
   ainstruction.cc
-  dinstruction.cc
+  cinstruction.cc
   hack.cc
   instruction.cc
   invalidsyntaxexception.cc
