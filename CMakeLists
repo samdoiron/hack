@@ -1,7 +1,0 @@
-
-cmake_minimum_required_version (VERSION 2.6)
-
-project (HACK)
-
-add_executable(hack hack.cc)
-

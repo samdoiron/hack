@@ -8,8 +8,6 @@ set (HACK_VERSION_MAJOR 0)
 set (HACK_VERSION_MINOR 1)
 
 set (Boost_USE_STATIC_LIBS ON)
-set (Boost_INCLUDE_DIR lib/boost)
-set (BOOST lib/boost/boost)
 
 find_package(Boost 1.5.7 REQUIRED)
 
@@ -24,7 +22,6 @@ add_executable(hack
   invalidsyntaxexception.cc
   label.cc
   program.cc
-  programline.cc
 )
 
 target_link_libraries(hack ${Boost_LIBRARIES})

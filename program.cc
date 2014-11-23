@@ -95,7 +95,7 @@ void Program::reportError(std::runtime_error error) {
 // Program::stripComments() removes all "//" style comments from the given
 // std::string.
 std::string Program::stripComments(std::string assembly) {
-    boost::regex commentRegex("//.*");
+    boost::regex commentRegex(std::string("//.*"));
     return boost::regex_replace(assembly, commentRegex, "");
 }
 

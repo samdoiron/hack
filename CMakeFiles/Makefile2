@@ -53,6 +53,41 @@ CMAKE_SOURCE_DIR = /Users/samdoiron/Code/C++/HACK
 CMAKE_BINARY_DIR = /Users/samdoiron/Code/C++/HACK
 
 #=============================================================================
+# Target rules for target CMakeFiles/hack.dir
+
+# All Build rule for target.
+CMakeFiles/hack.dir/all:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/depend
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /Users/samdoiron/Code/C++/HACK/CMakeFiles  1 2 3 4 5 6 7
+	@echo "Built target hack"
+.PHONY : CMakeFiles/hack.dir/all
+
+# Include target in all.
+all: CMakeFiles/hack.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/hack.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/samdoiron/Code/C++/HACK/CMakeFiles 7
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/hack.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/samdoiron/Code/C++/HACK/CMakeFiles 0
+.PHONY : CMakeFiles/hack.dir/rule
+
+# Convenience name for target.
+hack: CMakeFiles/hack.dir/rule
+.PHONY : hack
+
+# clean rule for target.
+CMakeFiles/hack.dir/clean:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/clean
+.PHONY : CMakeFiles/hack.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/hack.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Special targets to cleanup operation of make.
 
 # Special rule to run CMake to check the build system integrity.
