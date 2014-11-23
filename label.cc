@@ -11,7 +11,7 @@ Label::Label(std::string labelName, int labelAddress) {
 }
 
 /* static */ bool Label::isValid(std::string maybeLabel) {
-  return !maybeLabel.empty() && maybeLabel[maybeLabel.length() - 1] == 0;
+  return !maybeLabel.empty() && maybeLabel[maybeLabel.length() - 1] == ':';
 }
 
 std::string Label::getName() {

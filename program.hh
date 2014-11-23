@@ -27,10 +27,11 @@ class Program {
     std::string stripWhitespace(std::string);
     std::string stripComments(std::string);
     std::string extractLabels(std::string);
-    void loadInstructions(std::string);
+    void addInstruction(Instruction*);
+    void addLabel(Label);
     bool lineIsLabel(std::string);
-    void loadLabel(Label);
     bool hasInstructions();
+    void reportError(std::runtime_error);
 };
 
 
