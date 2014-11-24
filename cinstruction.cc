@@ -12,7 +12,7 @@ namespace hack {
 // <header> <    operation    ><  dest  ><  jump  >
 //
 // And in HACK assembly:
-// < dest >=< operation >;< jump? >
+// < dest? >=< operation >;< jump? >
 //
 // Where 'header' contains the memory access flag 'a'.
 //       'operation' defines the calculation to be performed (eg A+D)
@@ -49,10 +49,11 @@ bool CInstruction::hasDest() {
 
 std::string CInstruction::getDest() {
     static const boost::regex destPattern(".{1,3}=");
-    // If there is no calculation, the destination has no '=' (eg. D;JEQ)
+
+    // If there is no destination, the calculation has no '=' (eg. D;JEQ)
     if (this->hasDest()) {
         std::string match = this->findMatch(destPattern, this->assembly);
-        match.erase(match.length()-1); // Leave off the '='
+        match.erase(match.length()-1); // Leave off the trailing '='
         return match;
     } else {
         return "";
@@ -114,39 +115,35 @@ std::string CInstruction::getOperationBinary() {
     // There relationship between the operation and its resulting binary
     // is complicated enough that it is far easier to just use a big if
     // chain like this (as ugly as it is).
-    if (this->isMemoryOperation()) {
-        if (op == "M")   return "110000";
-        if (op == "!M")  return "110001";
-        if (op == "-M")  return "110011";
-        if (op == "M-1") return "110010";
-        if (op == "M+1") return "110111";
-        if (op == "D-M") return "010011";
-        if (op == "M-D") return "000111";
-        // + & and | are orderless
-        if (op == "D+M" || op == "M+D") return "000010";
-        if (op == "D&M" || op == "M&D") return "000000";
-        if (op == "D|M" || op == "M|D") return "010101";
-    } else {
-        if (op == "0")   return "101010";
-        if (op == "1")   return "111111";
-        if (op == "-1")  return "111010";
-        if (op == "D")   return "001100";
-        if (op == "A")   return "110000";
-        if (op == "!D")  return "001101";
-        if (op == "!A")  return "110001";
-        if (op == "-D")  return "001111";
-        if (op == "-A")  return "110011";
-        if (op == "D+1") return "011111";
-        if (op == "A+1") return "110111";
-        if (op == "D-1") return "001110";
-        if (op == "A-1") return "110010";
-        if (op == "D-A") return "010011";
-        if (op == "A-D") return "000111";
-        // + & and | are orderless
-        if (op == "D+A" || op == "A+D") return "000010";
-        if (op == "D&A" || op == "A&D") return "000000";
-        if (op == "D|A" || op == "A|D") return "010101";
-    }
+    if (op == "M")   return "110000";
+    if (op == "!M")  return "110001";
+    if (op == "-M")  return "110011";
+    if (op == "M-1") return "110010";
+    if (op == "M+1") return "110111";
+    if (op == "D-M") return "010011";
+    if (op == "M-D") return "000111";
+    if (op == "0")   return "101010";
+    if (op == "1")   return "111111";
+    if (op == "-1")  return "111010";
+    if (op == "D")   return "001100";
+    if (op == "A")   return "110000";
+    if (op == "!D")  return "001101";
+    if (op == "!A")  return "110001";
+    if (op == "-D")  return "001111";
+    if (op == "-A")  return "110011";
+    if (op == "D+1") return "011111";
+    if (op == "A+1") return "110111";
+    if (op == "D-1") return "001110";
+    if (op == "A-1") return "110010";
+    if (op == "D-A") return "010011";
+    if (op == "A-D") return "000111";
+    // + & and | are orderless
+    if (op == "D+M" || op == "M+D") return "000010";
+    if (op == "D&M" || op == "M&D") return "000000";
+    if (op == "D|M" || op == "M|D") return "010101";
+    if (op == "D+A" || op == "A+D") return "000010";
+    if (op == "D&A" || op == "A&D") return "000000";
+    if (op == "D|A" || op == "A|D") return "010101";
     throw this->invalidException("operation", op);
 }
 

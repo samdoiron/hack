@@ -40,8 +40,10 @@ int AInstruction::getValue() {
 
     bool isLiteralValue = boost::regex_match(valueName, literalPattern);
     if (isLiteralValue) {
+        // '@123123' case
         return std::stoi(valueName);
     } else {
+        // '@someVarName' case
         return program->getVariableValue(valueName);
     }
 }

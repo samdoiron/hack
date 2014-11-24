@@ -18,7 +18,6 @@ class Program {
   public:
     Program(std::string);
     std::string asHackBinary();
-    std::string asNormalizedAssembly();
     std::vector<hack::Instruction*> asInstructions();
     int getVariableValue(std::string);
 

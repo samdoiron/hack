@@ -16,9 +16,8 @@
 namespace hack { 
 
 Program::Program(std::string source) {
-    // TODO: Refactor streams to ostream / istream.
     std::string line;
-    std::stringstream inputStream(source);
+    std::istringstream inputStream(source);
     std::stringstream normalizedStream;
 
     // Variable allocation begins at address 16 (right after @R15)
@@ -50,19 +49,19 @@ Program::Program(std::string source) {
     }
 
     // Second pass, read in all instructions.
-    // This must be done after all vars are loaded, because AInstructions 
-    // need to know var addresses.
+    // This must be done after all labels are loaded, because AInstructions 
+    // need to know their addresses.
     // Here we keep track of the source line number, for error messages.
     int sourceLineNumber = 0;
     while (getline(normalizedStream, line)) {
         sourceLineNumber += 1;
 
-        // Skip empty lines
+        // Skip empty lines (kept to this point to preserve line numbers)
         if (line.empty()) {
             continue;
         }
 
-        // If the line is a var, ignore it.
+        // If the line is a label, ignore it.
         if (!this->lineIsLabel(line)) {
             try {
                 Instruction *lineInstruction = Instruction::fromAssembly(this, line);
@@ -89,14 +88,12 @@ std::string Program::asHackBinary() {
     return compiledString;
 }
 
-std::string Program::asNormalizedAssembly() {
-    std::stringstream compiledBinary; 
-
-    for (Instruction *instruction : this->instructions) {
-        compiledBinary << instruction->asAssembly() << std::endl;
+int Program::getVariableValue(std::string varName) {
+    if (!this->hasVariable(varName)) {
+        Variable var(varName, this->getNextVariableAddress());
+        this->addVariable(var);
     }
-
-    return compiledBinary.str();
+    return this->getVariable(varName).getValue();
 }
 
 std::vector<Instruction*> Program::asInstructions() {
@@ -141,14 +138,6 @@ bool Program::hasVariable(std::string varName) {
 
 Variable Program::getVariable(std::string varName) {
     return this->variables.at(varName);
-}
-
-int Program::getVariableValue(std::string varName) {
-    if (!this->hasVariable(varName)) {
-        Variable var(varName, this->getNextVariableAddress());
-        this->addVariable(var);
-    }
-    return this->getVariable(varName).getValue();
 }
 
 int Program::getNextVariableAddress() {
