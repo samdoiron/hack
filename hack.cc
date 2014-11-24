@@ -21,9 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     hack::Program program(sourceStream.str());
-    std::cout << "Output: " << std::endl;
     std::cout << program.asHackBinary() << std::endl;
-    std::cout << "/Output" << std::endl;
     return 0;
 }
 

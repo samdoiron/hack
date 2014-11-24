@@ -235,30 +235,6 @@ invalidsyntaxexception.cc.s:
 	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/invalidsyntaxexception.cc.s
 .PHONY : invalidsyntaxexception.cc.s
 
-label.o: label.cc.o
-.PHONY : label.o
-
-# target to build an object file
-label.cc.o:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/label.cc.o
-.PHONY : label.cc.o
-
-label.i: label.cc.i
-.PHONY : label.i
-
-# target to preprocess a source file
-label.cc.i:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/label.cc.i
-.PHONY : label.cc.i
-
-label.s: label.cc.s
-.PHONY : label.s
-
-# target to generate assembly for a file
-label.cc.s:
-	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/label.cc.s
-.PHONY : label.cc.s
-
 program.o: program.cc.o
 .PHONY : program.o
 
@@ -282,6 +258,30 @@ program.s: program.cc.s
 program.cc.s:
 	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/program.cc.s
 .PHONY : program.cc.s
+
+variable.o: variable.cc.o
+.PHONY : variable.o
+
+# target to build an object file
+variable.cc.o:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/variable.cc.o
+.PHONY : variable.cc.o
+
+variable.i: variable.cc.i
+.PHONY : variable.i
+
+# target to preprocess a source file
+variable.cc.i:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/variable.cc.i
+.PHONY : variable.cc.i
+
+variable.s: variable.cc.s
+.PHONY : variable.s
+
+# target to generate assembly for a file
+variable.cc.s:
+	$(MAKE) -f CMakeFiles/hack.dir/build.make CMakeFiles/hack.dir/variable.cc.s
+.PHONY : variable.cc.s
 
 # Help Target
 help:
@@ -307,12 +307,12 @@ help:
 	@echo "... invalidsyntaxexception.o"
 	@echo "... invalidsyntaxexception.i"
 	@echo "... invalidsyntaxexception.s"
-	@echo "... label.o"
-	@echo "... label.i"
-	@echo "... label.s"
 	@echo "... program.o"
 	@echo "... program.i"
 	@echo "... program.s"
+	@echo "... variable.o"
+	@echo "... variable.i"
+	@echo "... variable.s"
 .PHONY : help
 
 

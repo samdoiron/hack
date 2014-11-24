@@ -13,6 +13,9 @@ class AInstruction : public Instruction {
     private:
         Program *program;
         std::string assembly;
+        std::string binary;
+        std::string getBinary();
+        int getValue();
 };
 
 }

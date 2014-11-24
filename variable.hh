@@ -5,17 +5,15 @@
 
 namespace hack {
 
-class Label {
+class Variable {
   public:
-    static bool isValid(std::string);
-
-    Label(std::string, int);
-    int getAddress();
+    Variable(std::string, int);
     std::string getName();
+    int getValue();
 
   private:
     std::string name;
-    int address;
+    int value;
 };
 
 }

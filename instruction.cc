@@ -29,6 +29,7 @@ Instruction* Instruction::fromAssembly(Program *program, std::string assemblySni
     bool isAInstruction = firstCharacter == '@';
     bool isCInstruction = firstCharacter == 'A' 
                        || firstCharacter == 'D' 
+                       || firstCharacter == '0'
                        || firstCharacter == 'M';
 
     if (isAInstruction) {

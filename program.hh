@@ -4,9 +4,11 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include <unordered_map>
+
 #include "instruction.hh"
 
-#include "label.hh"
+#include "variable.hh"
 
 namespace hack {
 
@@ -18,18 +20,23 @@ class Program {
     std::string asHackBinary();
     std::string asNormalizedAssembly();
     std::vector<hack::Instruction*> asInstructions();
+    int getVariableValue(std::string);
 
   private:
+    int nextVariableAddress;
     std::vector<Instruction*> instructions;
-    std::vector<Label> labels;
+    std::unordered_map<std::string, Variable> variables;
     std::string normalizeLine(std::string);
     std::string stripComments(std::string);
-    std::string extractLabels(std::string);
     void addInstruction(Instruction*);
-    void addLabel(Label);
+    void addVariable(Variable);
+    void loadConstants();
     void reportParseError(int, std::string, std::runtime_error);
-    bool lineIsLabel(std::string);
     bool hasInstructions();
+    bool hasVariable(std::string);
+    bool lineIsLabel(std::string);
+    int getNextVariableAddress();
+    Variable getVariable(std::string);
 };
 
 

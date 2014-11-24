@@ -5,11 +5,11 @@
 #include <sstream>
 #include <vector>
 #include <cctype>
+#include <unordered_map>
 
-#include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 
-#include "label.hh"
+#include "variable.hh"
 #include "instruction.hh"
 #include "invalidsyntaxexception.hh"
 
@@ -20,9 +20,18 @@ Program::Program(std::string source) {
     std::string line;
     std::stringstream inputStream(source);
     std::stringstream normalizedStream;
-    int lineNumber = 1;
 
-    // Normalize assembly and load labels (on single pass for efficiency)
+    // Variable allocation begins at address 16 (right after @R15)
+    this->nextVariableAddress = 16;
+
+    // Load in global constant variables (eg. @KBD)
+    this->loadConstants();
+
+    // Record the compiled line number (which does not include empty lines
+    // or labels) to determine the value of labels when they are encountered.
+    int compiledLineNumber = 1;
+
+    // Normalize assembly and load vars (on single pass for efficiency)
     while (getline(inputStream, line)) {
         std::string normalizedLine = this->normalizeLine(line);
 
@@ -32,30 +41,36 @@ Program::Program(std::string source) {
         }
 
         // Load any found labels
-        if (Label::isValid(line)) {
-            this->addLabel(Label(normalizedLine, lineNumber));
+        if (this->lineIsLabel(line)) {
+            std::string varName = normalizedLine;
+            // Remove '(' and ')'
+            varName.erase(0, 1);
+            varName.erase(varName.length()-1);
+            this->addVariable(Variable(normalizedLine, compiledLineNumber));
+        } else {
+            compiledLineNumber += 1;
         }
 
         normalizedStream << normalizedLine << "\n";
-        lineNumber += 1;
     }
 
     // Second pass, read in all instructions.
-    // This must be done after all labels are loaded, because AInstructions 
-    // need to know label addresses.
-    lineNumber = 1;
+    // This must be done after all vars are loaded, because AInstructions 
+    // need to know var addresses.
+    // Here we keep track of the source line number, for error messages.
+    int sourceLineNumber = 1;
     while (getline(normalizedStream, line)) {
-        // If the line is a label, ignore it.
-        if (!Label::isValid(line)) {
+        // If the line is a var, ignore it.
+        if (!this->lineIsLabel(line)) {
             try {
                 Instruction *lineInstruction = Instruction::fromAssembly(this, line);
                 this->addInstruction(lineInstruction);
             } catch (InvalidSyntaxException e) {
-                this->reportParseError(lineNumber, line, e);
+                this->reportParseError(sourceLineNumber, line, e);
                 throw;
             }
         }
-        lineNumber += 1;
+        sourceLineNumber += 1;
     }
 }
 
@@ -65,8 +80,11 @@ std::string Program::asHackBinary() {
     for (Instruction *instruction : this->instructions) {
         compiledBinary << instruction->asHackBinary() << std::endl;
     }
+    std::string compiledString = compiledBinary.str();
 
-    return compiledBinary.str();
+    // Remove the final newline.
+    compiledString.erase(compiledString.length() - 1);
+    return compiledString;
 }
 
 std::string Program::asNormalizedAssembly() {
@@ -85,10 +103,60 @@ std::vector<Instruction*> Program::asInstructions() {
 
 // --- private
 
+// Remove whitespace and comments
 std::string Program::normalizeLine(std::string line) {
-    std::string normalized = this->stripComments(line);
-    boost::algorithm::trim(normalized);
-    return normalized;
+    static const boost::regex normalizeRegex("\\s|//.*");
+    return boost::regex_replace(line, normalizeRegex, "");
+}
+
+void Program::addInstruction(Instruction *instr) {
+    this->instructions.push_back(instr);
+}
+
+void Program::loadConstants() {
+    this->addVariable(Variable("LCL", 1));
+    this->addVariable(Variable("ARG", 2));
+    this->addVariable(Variable("THIS", 3));
+    this->addVariable(Variable("THAT", 4));
+    this->addVariable(Variable("SCREEN", 16384));
+    this->addVariable(Variable("KBD", 24576));
+
+    // Load registers 0 - 15
+    for (int i = 0; i < 15; ++i) {
+        std::ostringstream regName;
+        regName << "R" << i;
+        this->addVariable(Variable(regName.str(), i));
+    }
+}
+
+void Program::addVariable(Variable var) {
+    this->variables.insert(std::make_pair(var.getName(), var));
+}
+
+bool Program::hasVariable(std::string varName) {
+    return this->variables.count(varName) == 1;
+}
+
+Variable Program::getVariable(std::string varName) {
+    return this->variables.at(varName);
+}
+
+int Program::getVariableValue(std::string varName) {
+    if (!this->hasVariable(varName)) {
+        Variable var(varName, this->getNextVariableAddress());
+        this->addVariable(var);
+    }
+    return this->getVariable(varName).getValue();
+}
+
+int Program::getNextVariableAddress() {
+    return this->nextVariableAddress++;
+}
+
+bool Program::lineIsLabel(std::string line) {
+    return line.length() > 0 
+        && line[0] == '(' 
+        && line[line.length()-1] == ')';
 }
 
 void Program::reportParseError(
@@ -97,21 +165,6 @@ void Program::reportParseError(
     std::cerr << "Error parsing \"" << assembly 
         << "\" (line " << lineNum << ") "
         << error.what() << std::endl;
-}
-
-// Program::stripComments() removes all "//" style comments from the given
-// std::string.
-std::string Program::stripComments(std::string assembly) {
-    boost::regex commentRegex("//.*");
-    return boost::regex_replace(assembly, commentRegex, "");
-}
-
-void Program::addInstruction(Instruction *instr) {
-    this->instructions.push_back(instr);
-}
-
-void Program::addLabel(Label label) {
-    this->labels.push_back(label);
 }
 
 }
