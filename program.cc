@@ -29,24 +29,19 @@ Program::Program(std::string source) {
 
     // Record the compiled line number (which does not include empty lines
     // or labels) to determine the value of labels when they are encountered.
-    int compiledLineNumber = 1;
+    int compiledLineNumber = 0;
 
     // Normalize assembly and load vars (on single pass for efficiency)
     while (getline(inputStream, line)) {
         std::string normalizedLine = this->normalizeLine(line);
 
-        // Skip empty lines
-        if (normalizedLine.empty()) {
-            continue;
-        }
-
         // Load any found labels
-        if (this->lineIsLabel(line)) {
+        if (this->lineIsLabel(normalizedLine)) {
             std::string varName = normalizedLine;
             // Remove '(' and ')'
             varName.erase(0, 1);
             varName.erase(varName.length()-1);
-            this->addVariable(Variable(normalizedLine, compiledLineNumber));
+            this->addVariable(Variable(varName, compiledLineNumber));
         } else {
             compiledLineNumber += 1;
         }
@@ -58,8 +53,15 @@ Program::Program(std::string source) {
     // This must be done after all vars are loaded, because AInstructions 
     // need to know var addresses.
     // Here we keep track of the source line number, for error messages.
-    int sourceLineNumber = 1;
+    int sourceLineNumber = 0;
     while (getline(normalizedStream, line)) {
+        sourceLineNumber += 1;
+
+        // Skip empty lines
+        if (line.empty()) {
+            continue;
+        }
+
         // If the line is a var, ignore it.
         if (!this->lineIsLabel(line)) {
             try {
