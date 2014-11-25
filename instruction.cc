@@ -27,20 +27,13 @@ namespace hack {
 Instruction* Instruction::fromAssembly(Program *program, std::string assemblySnippet) {
     char firstCharacter = assemblySnippet.at(0);
     bool isAInstruction = firstCharacter == '@';
-    bool isCInstruction = firstCharacter == 'A' 
-                       || firstCharacter == 'D' 
-                       || firstCharacter == '0'
-                       || firstCharacter == 'M';
-
     if (isAInstruction) {
         // AInstruction must know the locations of variables, so it needs a 
         // reference to the program.
         return new AInstruction(program, assemblySnippet);
-    } else if (isCInstruction) {
+    } else {
         // CInstruction is stateless, so we don't need to pass the program
         return new CInstruction(assemblySnippet);
-    } else {
-        throw InvalidSyntaxException("Instruction is neither A nor D instruction.");
     }
 }
 

@@ -2,10 +2,10 @@ cmake_minimum_required (VERSION 2.6)
 
 project (HACK)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wno-exit-time-destructors -Weverything -Wno-weak-vtables -std=c++11 -Wno-c++98-compat -Wno-c++11-extensions -Wno-padded -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-documentation-unknown-command -Wno-undef -Wno-documentation -Wno-extra-semi -Wno-old-style-cast -Wno-switch-enum -Wno-disabled-macro-expansion -g")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wno-exit-time-destructors -Wall -Weverything -Wno-weak-vtables -std=c++11 -Wno-c++98-compat -Wno-c++11-extensions -Wno-padded -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-documentation-unknown-command -Wno-undef -Wno-documentation -Wno-extra-semi -Wno-old-style-cast -Wno-switch-enum -Wno-disabled-macro-expansion -g")
 
-set (HACK_VERSION_MAJOR 0)
-set (HACK_VERSION_MINOR 1)
+1et (HACK_VERSION_MAJOR 1)
+set (HACK_VERSION_MINOR 0)
 
 add_executable(hack 
   ainstruction.cc
@@ -19,11 +19,10 @@ add_executable(hack
 
 set (Boost_STATIC_LIBRARIES ON)
 
-find_package(Boost 1.5.7 COMPONENTS regex log REQUIRED)
+find_package(Boost 1.5.7 COMPONENTS regex REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
-add_definitions(-DBOOST_LOG_DYN_LINK)
 
 target_link_libraries(hack ${Boost_LIBRARIES})
 
