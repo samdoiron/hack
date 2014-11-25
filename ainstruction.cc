@@ -44,7 +44,9 @@ int AInstruction::getValue() {
         return std::stoi(valueName);
     } else {
         // '@someVarName' case
-        return program->getVariableValue(valueName);
+        int val = program->getVariableValue(valueName);
+        std::cerr << "Got value for " << this->assembly << " as " << val << std::endl;
+        return val;
     }
 }
 
