@@ -15,6 +15,11 @@ class CInstruction : public Instruction {
         std::string asHackBinary();
         std::string asAssembly();
     private:
+        void cacheBinary(std::string);
+        bool hasCachedBinary();
+        std::string getCachedBinary();
+        static std::unordered_map<std::string, std::string> instructionCache;
+        static bool hasCached(std::string);
         std::string assembly, binary;
         std::string getBinary();
         std::string getHeaderBinary();

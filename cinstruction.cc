@@ -1,3 +1,4 @@
+#include <unordered_map>
 
 #include "cinstruction.hh"
 #include <string>
@@ -6,6 +7,8 @@
 #include <boost/regex.hpp>
 
 namespace hack {
+
+std::unordered_map<std::string, std::string> CInstruction::instructionCache;
 
 // CInstructions have the following format:
 // [1 1 1 a][c1 c2 c3 c4 c5 c6][d1 d2 d3][j1 j2 j3]
@@ -33,14 +36,31 @@ std::string CInstruction::asHackBinary() {
 
 // --- private
 
+void CInstruction::cacheBinary(std::string calculated) {
+    instructionCache.insert(std::make_pair(this->assembly, calculated));
+}
+
+bool CInstruction::hasCachedBinary() {
+    return instructionCache.count(this->assembly) == 1;
+}
+
+std::string CInstruction::getCachedBinary() {
+    return instructionCache.at(this->assembly);
+}
+
 std::string CInstruction::getBinary() {
+    if (this->hasCachedBinary()) {
+        return this->getCachedBinary();
+    }
     std::ostringstream binaryStream;
     binaryStream
         << this->getHeaderBinary()
         << this->getOperationBinary()
         << this->getDestBinary()
         << this->getJumpBinary();
-    return binaryStream.str();
+    std::string bin = binaryStream.str();
+    this->cacheBinary(bin);
+    return bin;
 }
 
 bool CInstruction::hasDest() {

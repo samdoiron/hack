@@ -28,6 +28,7 @@ std::string AInstruction::asHackBinary() {
 
 std::string AInstruction::getBinary() {
     std::ostringstream binaryStream;
+    // Convert the value into a binary string, and prepend "0"
     binaryStream << "0" << std::bitset<15>((unsigned long long)(this->getValue()));
     return binaryStream.str();
 }
