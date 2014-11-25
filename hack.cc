@@ -8,9 +8,15 @@
 #include "program.hh"
 #include "invalidsyntaxexception.hh"
 
-int main(void) {
+int main(int argc, char *argv[]) {
     std::ostringstream sourceStream;
-    sourceStream << std::cin.rdbuf();
+    if (argc > 1) {
+        std::ifstream fileInput(argv[1]);
+        sourceStream << fileInput.rdbuf();
+    } else {
+        std::cout << argc <<  std::endl;
+        sourceStream << std::cin.rdbuf();
+    }
     try {
         hack::Program program(sourceStream.str());
         std::cout << program.asHackBinary() << std::endl;

@@ -28,8 +28,7 @@ std::string AInstruction::asHackBinary() {
 
 std::string AInstruction::getBinary() {
     std::ostringstream binaryStream;
-    binaryStream << "0"
-        << std::bitset<15>((unsigned long long)(this->getValue()));
+    binaryStream << "0" << std::bitset<15>((unsigned long long)(this->getValue()));
     return binaryStream.str();
 }
 

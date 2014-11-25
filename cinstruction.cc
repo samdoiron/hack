@@ -98,7 +98,6 @@ std::string CInstruction::getHeaderBinary() {
 std::string CInstruction::getDestBinary() {
     std::string dest = this->getDest();
     if (dest == "")    return "000";
-    if (dest == "0")   return "000";
     if (dest == "M")   return "001";
     if (dest == "D")   return "010";
     if (dest == "MD")  return "011";
@@ -115,9 +114,7 @@ std::string CInstruction::getOperationBinary() {
     // There relationship between the operation and its resulting binary
     // is complicated enough that it is far easier to just use a big if
     // chain like this (as ugly as it is).
-    if (op == "M")   return "110000";
     if (op == "!M")  return "110001";
-    if (op == "-M")  return "110011";
     if (op == "M-1") return "110010";
     if (op == "M+1") return "110111";
     if (op == "D-M") return "010011";
@@ -126,11 +123,13 @@ std::string CInstruction::getOperationBinary() {
     if (op == "1")   return "111111";
     if (op == "-1")  return "111010";
     if (op == "D")   return "001100";
+    if (op == "M")   return "110000";
     if (op == "A")   return "110000";
     if (op == "!D")  return "001101";
     if (op == "!A")  return "110001";
     if (op == "-D")  return "001111";
     if (op == "-A")  return "110011";
+    if (op == "-M")  return "110011";
     if (op == "D+1") return "011111";
     if (op == "A+1") return "110111";
     if (op == "D-1") return "001110";
@@ -139,11 +138,11 @@ std::string CInstruction::getOperationBinary() {
     if (op == "A-D") return "000111";
     // + & and | are orderless
     if (op == "D+M" || op == "M+D") return "000010";
-    if (op == "D&M" || op == "M&D") return "000000";
-    if (op == "D|M" || op == "M|D") return "010101";
     if (op == "D+A" || op == "A+D") return "000010";
-    if (op == "D&A" || op == "A&D") return "000000";
+    if (op == "D|M" || op == "M|D") return "010101";
     if (op == "D|A" || op == "A|D") return "010101";
+    if (op == "D&M" || op == "M&D") return "000000";
+    if (op == "D&A" || op == "A&D") return "000000";
     throw this->invalidException("operation", op);
 }
 

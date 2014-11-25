@@ -89,15 +89,13 @@ std::string Program::asHackBinary() {
 }
 
 int Program::getVariableValue(std::string varName) {
-    if (!this->hasVariable(varName)) {
+    if (this->hasVariable(varName)) {
+        return this->getVariable(varName).getValue();
+    } else {
         Variable var(varName, this->getNextVariableAddress());
         this->addVariable(var);
+        return var.getValue();
     }
-    return this->getVariable(varName).getValue();
-}
-
-std::vector<Instruction*> Program::asInstructions() {
-    return this->instructions;
 }
 
 // --- private
