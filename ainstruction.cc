@@ -1,6 +1,7 @@
 #include <string>
 #include <sstream>
 #include <bitset>
+#include <climits>
 
 #include <boost/regex.hpp>
 
@@ -29,24 +30,35 @@ std::string AInstruction::asHackBinary() {
 std::string AInstruction::getBinary() {
     std::ostringstream binaryStream;
     // Convert the value into a binary string, and prepend "0"
+
     binaryStream << "0" << std::bitset<15>((unsigned long long)(this->getValue()));
     return binaryStream.str();
 }
 
+bool AInstruction::isLiteral() {
+    static const boost::regex literalPattern("@\\d+");
+    return boost::regex_match(this->assembly, literalPattern);
+}
+
+bool AInstruction::isVariable() {
+    static const boost::regex literalPattern("@[a-zA-Z:\\.\\$][\\w:\\.\\$\\d]*");
+    return boost::regex_match(this->assembly, literalPattern);
+}
+
 int AInstruction::getValue() {
-    static const boost::regex literalPattern("\\d+");
     std::string valueName = this->assembly;
     valueName.erase(0, 1); // Remove leading '@'
-
-    bool isLiteralValue = boost::regex_match(valueName, literalPattern);
-    if (isLiteralValue) {
-        // '@123123' case
-        return std::stoi(valueName);
-    } else {
+    if (this->isLiteral()) {
+        try {
+            return std::stoi(valueName);
+        } catch(std::out_of_range){
+            throw InvalidSyntaxException("Literal value is too large");
+        }
+    } else if (this->isVariable()) {
         // '@someVarName' case
-        int val = program->getVariableValue(valueName);
-        std::cerr << "Got value for " << this->assembly << " as " << val << std::endl;
-        return val;
+        return program->getVariableValue(valueName);
+    } else {
+        throw InvalidSyntaxException("Invalid variable name.");
     }
 }
 

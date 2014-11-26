@@ -16,6 +16,8 @@ class AInstruction : public Instruction {
         std::string binary;
         std::string getBinary();
         int getValue();
+        bool isLiteral();
+        bool isVariable();
 };
 
 }

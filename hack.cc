@@ -11,6 +11,7 @@
 int main(void) {
     std::ostringstream sourceStream;
     sourceStream << std::cin.rdbuf();
+    std::string source = sourceStream.str();
     try {
         hack::Program program(sourceStream.str());
         std::cout << program.asHackBinary() << std::endl;

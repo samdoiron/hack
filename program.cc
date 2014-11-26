@@ -40,8 +40,6 @@ Program::Program(std::string source) {
             // Remove '(' and ')'
             varName.erase(0, 1);
             varName.erase(varName.length()-1);
-            std::cerr << "From label" << std::endl;
-            std::cerr << normalizedLine << std::endl;
             this->addVariable(Variable(varName, compiledLineNumber));
         } else if (!normalizedLine.empty()) {
             compiledLineNumber += 1;
@@ -81,24 +79,22 @@ std::string Program::asHackBinary() {
     std::stringstream compiledBinary; 
 
     for (Instruction *instruction : this->instructions) {
-        compiledBinary << instruction->asHackBinary() << "; " 
-            << instruction->asAssembly() 
-            << std::endl;
+        compiledBinary << instruction->asHackBinary() << std::endl;
     }
     std::string compiledString = compiledBinary.str();
 
-    // Remove the final newline.
-    compiledString.erase(compiledString.length() - 1);
+    if (!compiledString.empty()) {
+        // Remove the final newline to perfectly match example assembler.
+        compiledString.erase(compiledString.length() - 1);
+    }
     return compiledString;
 }
 
 int Program::getVariableValue(std::string varName) {
     if (this->hasVariable(varName)) {
-        std::cerr << "Yep, I have " << varName << std::endl;
         return this->getVariable(varName).getValue();
     } else {
         Variable var(varName, this->getNextVariableAddress());
-        std::cerr << "From getVariable" << std::endl;
         this->addVariable(var);
         return var.getValue();
     }
@@ -134,7 +130,6 @@ void Program::loadConstants() {
 }
 
 void Program::addVariable(Variable var) {
-    std::cerr << "Adding variable " << var.getName() << std::endl;
     this->variables.insert(std::make_pair(var.getName(), var));
 }
 
@@ -148,14 +143,12 @@ Variable Program::getVariable(std::string varName) {
 
 int Program::getNextVariableAddress() {
     int next = this->nextVariableAddress++;
-    std::cerr << "It is " << next << std::endl;
     return next;
 }
 
 bool Program::lineIsLabel(std::string line) {
-    return line.length() > 0 
-        && line[0] == '(' 
-        && line[line.length()-1] == ')';
+    static const boost::regex labelPattern("\\([a-zA-Z:\\.\\$][\\w:\\.\\$\\d]*\\)");
+    return boost::regex_match(line, labelPattern);
 }
 
 void Program::reportParseError(
